@@ -1,21 +1,27 @@
-import React from "react";
+import React, { Component } from "react";
 
+import TaskFilterItem from "../tasks-filter-item";
 import './tasks-filter.css';
 
-const TasksFilter = () => {
-	return (
-		<ul className="filters">
-			<li>
-				<button className="selected">All</button>
-			</li>
-			<li>
-				<button>Active</button>
-			</li>
-			<li>
-				<button>Completed</button>
-			</li>
-		</ul>
-	);
-};
+export default class TasksFilter extends Component {
+	render() {
+		const { filters, onFilterClick } = this.props;
+		const elements = filters.map(item => {
+			const { id, ...itemProps } = item;
 
-export default TasksFilter;
+			return (
+				<li key={id}>
+					<TaskFilterItem
+						onFilterClick={() => onFilterClick(id)}
+						{...itemProps} />
+				</li>
+			);
+		});
+
+		return (
+			<ul className="filters">
+				{elements}
+			</ul>
+		);
+	}
+};

@@ -3,21 +3,39 @@ import React from "react";
 import './task-list.css';
 import Task from "../task";
 
-const TaskList = ({ tasks, onChanged, onDeleted }) => {
-	const elements = tasks.map(item => {
-		const { id, status, ...itemProps } = item;
+const TaskList = ({ tasks, filters, onChanged, onDeleted }) => {
+	const { selected } = filters;
 
-		return (
-			<li key={id} className={status}>
-				<Task
-					{...itemProps}
-					onChanged={() => onChanged(id)}
-					onDeleted={() => onDeleted(id)} />
-				<input type="text" className="edit"
-					value="Editing task"
-					readOnly />
-			</li>
-		);
+	const filterSelected = () => {
+		let selected = {};
+
+		filters.forEach(filter => {
+			if (filter.selected) {
+				selected = filter;
+			}
+		});
+
+		return selected;
+	};
+
+	const elements = tasks.map(item => {
+		const { id, ...itemProps } = item;
+
+		if (filterSelected().label === 'All' || filterSelected().label.toLowerCase() === itemProps.status) {
+			return (
+				<li key={id} className={itemProps.status}>
+
+					<Task
+						{...itemProps}
+						onChanged={() => onChanged(id)}
+						onDeleted={() => onDeleted(id)} />
+
+					<input type="text" className="edit"
+						value="Editing task"
+						readOnly />
+				</li>
+			);
+		}
 	});
 
 	return (

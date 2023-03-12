@@ -6,14 +6,37 @@ import TaskList from "../task-list";
 import Footer from "../footer";
 
 export default class App extends Component {
+	maxId = 100;
 
 	state = {
 		tasks: [
-			{ status: 'completed', description: 'Completed task', created: new Date(), id: 1 },
-			{ status: 'editing', description: 'Editing task', created: new Date(), id: 2 },
-			{ status: 'active', description: 'Active task', created: new Date(), id: 3 },
+			this.createTaskItem('Completed task'),
+			this.createTaskItem('Editing task'),
+			this.createTaskItem('Active task'),
+		],
+		filters: [
+			this.createFilterItem('All', true),
+			this.createFilterItem('Active'),
+			this.createFilterItem('Completed'),
 		]
 	}
+
+	createTaskItem(text) {
+		return {
+			status: 'active',
+			description: text,
+			created: new Date(),
+			id: this.maxId++
+		};
+	};
+
+	createFilterItem(text, select = false) {
+		return {
+			label: text,
+			selected: select,
+			id: this.maxId++
+		};
+	};
 
 	changeStatus = (id) => {
 		this.setState(({ tasks }) => {
@@ -38,18 +61,60 @@ export default class App extends Component {
 		});
 	};
 
+	addItem = (text) => {
+		const newItem = this.createTaskItem(text);
+
+		this.setState(({ tasks }) => {
+			const newArray = [...tasks, newItem];
+
+			return { tasks: newArray };
+		});
+	};
+
+	filterItems = (id) => {
+		this.setState(({ filters }) => {
+			const newArray = [...filters];
+			const idx = filters.findIndex((el) => el.id === id);
+
+			newArray.map((item, index) => {
+				if (index === idx) {
+					return item.selected = true;
+				}
+
+				return item.selected = false;
+			});
+
+			return { filters: newArray };
+		});
+
+	};
+
+	deleteComplited = () => {
+		this.setState(({ tasks }) => {
+			const newArray = tasks.filter(item => item.status !== 'completed');
+
+			return { tasks: newArray }
+		});
+	}
+
 	render() {
-		const { tasks } = this.state;
+		const { tasks, filters } = this.state;
+		const activeCount = tasks.filter(item => item.status === 'active').length;
 
 		return (
 			<section className="todoapp">
-				<Header />
+				<Header onItemAdded={this.addItem} />
 				<section className="main">
 					<TaskList
 						tasks={tasks}
+						filters={filters}
 						onChanged={this.changeStatus}
 						onDeleted={this.deletItem} />
-					<Footer />
+					<Footer
+						onFilterClick={this.filterItems}
+						filters={filters}
+						onComletedDeleted={this.deleteComplited}
+						activeCount={activeCount} />
 				</section>
 			</section>
 		);
