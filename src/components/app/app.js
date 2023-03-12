@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { formatDistanceToNow } from "date-fns";
 
 import './app.css';
 import Header from "../header";
@@ -25,7 +26,7 @@ export default class App extends Component {
 		return {
 			status: 'active',
 			description: text,
-			created: new Date(),
+			created: formatDistanceToNow(new Date(), { addSuffix: true, includeSeconds: true }),
 			id: this.maxId++
 		};
 	};

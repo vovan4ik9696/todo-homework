@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import NewTaskForm from '../new-task-form';
 
@@ -10,5 +11,9 @@ const Header = ({ onItemAdded }) => {
 		</header>
 	);
 }
+
+Header.propTypes = {
+	onItemAdded: PropTypes.func
+};
 
 export default Header;

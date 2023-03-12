@@ -1,13 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 
 import './tasks-filter-item.css';
 
-export default class TaskFilterItem extends Component {
-	render() {
-		const { label, selected, onFilterClick } = this.props;
-
-		return (
-			<button onClick={onFilterClick} className={selected ? 'selected' : ''}>{label}</button>
-		);
-	};
+const TaskFilterItem = ({ label, selected, onFilterClick }) => {
+	return <button onClick={onFilterClick} className={selected ? 'selected' : ''}>{label}</button>;
 };
+
+TaskFilterItem.propTypes = {
+	label: PropTypes.string,
+	selected: PropTypes.bool,
+	onFilterClick: PropTypes.func
+}
+
+export default TaskFilterItem;

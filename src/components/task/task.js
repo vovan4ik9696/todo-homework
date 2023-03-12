@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 import './task.css';
 
@@ -14,7 +15,7 @@ const Task = ({ description, status, created, onChanged, onDeleted }) => {
 				readOnly />
 			<label>
 				<span className="description">{description}</span>
-				<span className="created">created 17 seconds ago</span>
+				<span className="created">{created}</span>
 			</label>
 			<button className="icon icon-edit"></button>
 			<button
@@ -22,6 +23,14 @@ const Task = ({ description, status, created, onChanged, onDeleted }) => {
 				onClick={onDeleted}></button>
 		</div>
 	);
+};
+
+Task.propTypes = {
+	description: PropTypes.string,
+	status: PropTypes.string,
+	created: PropTypes.string,
+	onChanged: PropTypes.func,
+	onDeleted: PropTypes.func
 };
 
 export default Task;
